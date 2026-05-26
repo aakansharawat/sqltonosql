@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL to NoSQL Transpiler</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="site-header">
+        <div class="wrap">
+            <div class="brand">
+                <span class="brand-icon">⇄</span>
+                <div>
+                    <h1>SQL to NoSQL</h1>
+                    <p>Parse SQL and generate MongoDB, Cassandra, DynamoDB, or Redis output</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="wrap main">
+        <!-- Input -->
+        <section class="card">
+            <div class="card-top">
+                <h2>SQL query</h2>
+                <label class="field-inline">
+                    <span>Target</span>
+                    <select id="target-db">
+                        <option value="mongodb">MongoDB</option>
+                        <option value="cassandra">Cassandra</option>
+                        <option value="dynamodb">DynamoDB</option>
+                        <option value="redis">Redis</option>
+                    </select>
+                </label>
+            </div>
+
+            <textarea
+                id="sql-input"
+                class="sql-input"
+                placeholder="SELECT name, age FROM users WHERE age > 25 LIMIT 10"
+                spellcheck="false"
+            ></textarea>
+
+            <div class="actions">
+                <button id="convert-btn" class="btn primary">
+                    Convert to <span id="target-name">MongoDB</span>
+                </button>
+                <button id="clear-btn" class="btn ghost" type="button">Clear</button>
+                <button id="example-btn" class="btn ghost" type="button">Load example</button>
+            </div>
+
+            <div class="chips">
+                <span class="chips-label">Try:</span>
+                <button type="button" class="chip" onclick="setExample('SELECT name, email FROM users WHERE age > 25')">Users by age</button>
+                <button type="button" class="chip" onclick="setExample('SELECT * FROM products ORDER BY price DESC LIMIT 5')">Top products</button>
+                <button type="button" class="chip" onclick="setExample('SELECT title FROM books WHERE rating >= 4.5')">Rated books</button>
+            </div>
+        </section>
+
+        <!-- Error -->
+        <div id="error" class="alert" style="display: none;">
+            <strong>Error</strong>
+            <p id="error-message"></p>
+            <button type="button" class="alert-close" onclick="dismissError()">×</button>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading" class="loading-bar" style="display: none;">
+            <div class="loading-bar-fill"></div>
+        </div>
+
+        <!-- Results -->
+        <section class="card results" id="results" style="display: none;">
+            <div class="card-top">
+                <h2>Output</h2>
+                <button type="button" class="btn ghost small" onclick="downloadAll()">Download</button>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" data-tab="target">
+                    <span id="target-tab-name">MongoDB</span>
+                </button>
+                <button class="tab" data-tab="uast">UAST</button>
+                <button class="tab" data-tab="ast">AST</button>
+            </div>
+
+            <div class="tab-panel active" id="target-tab">
+                <div class="panel-bar">
+                    <span id="target-query-title">MongoDB</span> query
+                    <button type="button" class="btn ghost small copy-btn" data-target="target-output">Copy</button>
+                </div>
+                <pre id="target-output" class="code-block highlight"></pre>
+            </div>
+
+            <div class="tab-panel" id="uast-tab">
+                <div class="panel-bar">
+                    Unified AST
+                    <button type="button" class="btn ghost small copy-btn" data-target="uast-output">Copy</button>
+                </div>
+                <pre id="uast-output" class="code-block"></pre>
+            </div>
+
+            <div class="tab-panel" id="ast-tab">
+                <div class="panel-bar">
+                    Abstract Syntax Tree
+                    <button type="button" class="btn ghost small copy-btn" data-target="ast-output">Copy</button>
+                </div>
+                <pre id="ast-output" class="code-block"></pre>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap">
+            <span>Ctrl + Enter to convert</span>
+            <span>SQL → AST → UAST → NoSQL</span>
+        </div>
+    </footer>
+
+    <script src="/script.js"></script>
+</body>
+</html>
