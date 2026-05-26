@@ -1,0 +1,9 @@
+# Python dependencies for SQL Parser
+
+# ANTLR4 Python runtime (must match ANTLR4 version)
+# Note: Use 4.9.2 if using system ANTLR4 (Ubuntu/Debian)
+# Use 4.13.1 if you downloaded the JAR file manually
+antlr4-python3-runtime==4.9.2
+
+# For pretty printing JSON
+# (built-in json module is sufficient, but these are optional enhancements)
